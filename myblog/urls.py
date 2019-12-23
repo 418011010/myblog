@@ -15,7 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from blog import views
+from django.urls import path, include, re_path
+from django.views.static import serve
+#导入静态文件模块
+from django.conf import settings
+#导入配置文件里的文件上传配置
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index),
+    path('ueditor/', include('DjangoUeditor.urls')),
+    re_path('^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+
+
 ]

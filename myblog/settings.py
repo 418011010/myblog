@@ -25,7 +25,7 @@ SECRET_KEY = '1dk13+$oiww#bc6#=7gd75dd=l6(%dzkzzqp#vgfpug-nx19t8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
+    'DjangoUeditor',
+
 ]
 
 MIDDLEWARE = [
@@ -77,8 +79,12 @@ WSGI_APPLICATION = 'myblog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blog',
+        'USER': 'root',
+        'PASSWORD': 'coship',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -105,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -120,3 +126,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+#这个是设置静态文件夹目录的路径
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+#设置文件上传路径，图片上传、文件上传都会存放在此目录里
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
