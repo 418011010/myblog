@@ -3,7 +3,7 @@
     <div id="main-container" class="container clearfix">
         <section class="post-left">
             <div class="breadcrumb">您的位置： <a itemprop="breadcrumb" href="{% url 'index' %}">首页</a> » <span
-                    class="current">{{ cname }}</span></div>
+                    class="current">关键词：{{ ss }}</span></div>
             <div class="index-main clearfix">
                 <div class="main-title">
                     <h4 class="post-left-title">分类：{{ cname }}</h4>
@@ -39,7 +39,7 @@
                 <div class="pagination">
                     <ul>
                         {% if list.has_previous %}
-                        <li class="prev-page"><a href="?page={{ list.previous_page_number }}">上一页</a></li>
+                        <li class="prev-page"><a href="{% url 'index' %}s/?search={{ ss }}&page={{ list.previous_page_number }}">上一页</a></li>
                         {% else %}
                          <li class="prev-page"></li>
                         {% endif %}
@@ -50,7 +50,7 @@
                                     {% ifequal num list.number %}
                                         <li class="active"><span>{{ num }}</span></li>
                                     {% else %}
-                                        <li><a href="?page={{ num }}">{{ num }}</a></li>
+                                        <li><a href="{% url 'index' %}s/?search={{ ss }}&page={{ num }}">{{ num }}</a></li>
                                     {% endifequal %}
                                 {% else %}
                                     <li class="disabled"><span>...</span></li>
@@ -59,7 +59,7 @@
 
 
                             {% if list.has_next %}
-                                <li class="next-page"><a href="?page={{ list.next_page_number }}">下一页</a></li>
+                                <li class="next-page"><a href="{% url 'index' %}s/?search={{ ss }}&page={{ list.next_page_number }}">下一页</a></li>
                             {% else %}
                                 <li class="prev-page"></li>
                             {% endif %}
