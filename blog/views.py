@@ -73,7 +73,7 @@ def index(request):
 
 #列表页
 def list(request,lid):
-    list = Article.objects.filter(category_id=lid)#获取通过URL传进来的lid，然后筛选出对应文章
+    list = Article.objects.filter(category_id=lid).order_by('-id')#获取通过URL传进来的lid，然后筛选出对应文章
     cname = Category.objects.get(id=lid)#获取当前文章的栏目名
 
 
@@ -100,7 +100,7 @@ def show(request,sid):
 
 #标签页
 def tag(request, tag):
-    list = Article.objects.filter(tags__name=tag)
+    list = Article.objects.filter(tags__name=tag).order_by('-id')
 
     tname = Tag.objects.get(name=tag)#获取当前搜索的标签名
     page = request.GET.get('page')
