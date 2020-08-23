@@ -95,3 +95,36 @@ class Link(models.Model):
     class Meta:
         verbose_name = '友情链接'
         verbose_name_plural = '友情链接'
+
+
+class Cihai(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    words = models.CharField(max_length=255, blank=True, null=True)
+    content = models.CharField(max_length=255, blank=True, null=True)
+    yin = models.CharField(max_length=255, blank=True, null=True)
+    yun = models.CharField(max_length=255, blank=True, null=True)
+    key1 = models.CharField(max_length=255, blank=True, null=True)
+    key2 = models.CharField(max_length=255, blank=True, null=True)
+    key3 = models.CharField(max_length=255, blank=True, null=True)
+    key4 = models.CharField(max_length=255, blank=True, null=True)
+    key5 = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+
+        managed = True
+        db_table = 'cihai'
+
+
+class Words(models.Model):
+    word = models.CharField(max_length=255)
+    pron = models.CharField(max_length=255, blank=True, null=True)
+    ch = models.CharField(max_length=255, blank=True, null=True)
+    key1 = models.CharField(max_length=255, blank=True, null=True)
+    key2 = models.CharField(max_length=255, blank=True, null=True)
+    key3 = models.CharField(max_length=255, blank=True, null=True)
+    key4 = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+
+        managed = True
+        db_table = 'words'

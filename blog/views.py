@@ -1,16 +1,60 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse ,JsonResponse
 from .models import Article
-from .models import Category, Banner, Article, Tag, Link
+from .models import Category, Banner, Article, Tag, Link, Cihai, Words
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+import random
 # Create your views here.
+
 
 def global_variable(request):
     allcategory = Category.objects.all()
     remen = Article.objects.filter(tui__id=2)[:6]
     tags = Tag.objects.all()
     return locals()
+
+
+def testdb(request):
+    ll = Cihai.objects.all().using('db2').filter(key3__contains='ang')[0:10]
+    return HttpResponse(ll.values())
+
+
+def wxpost(request):
+    if request.POST.get('language') == 'Chinese':
+        mapping = {'s': 'key1', 'd': 'key2', 't': 'key3', 'q': 'key4'}
+        json_data = {}
+        data_list = []
+        key = mapping[request.POST.get('mult')]
+        kw = request.POST.get('keyword')
+        print(kw)
+        # items = Cihai.objects.all().using('db2').raw(
+        #     "SELECT * from Cihai WHERE key1=(SELECT key1  from Cihai where binary words='一心一意')")
+        items = Cihai.objects.all().using('db2').raw("SELECT * from Cihai WHERE {}=(SELECT {}  from Cihai where words='{}')".format(key, key, kw))
+        #print(len(items))
+        #print(type(items))
+        items = random.sample(list(items), 100 if len(items) > 100 else len(items))
+        print(len(items))
+        for item in items:
+            #print(type(item))
+            data = {}
+            data["words"] = item.words
+            data["content"] = item.content
+            data["yun"] = item.yun
+            data["key"] = getattr(item, key)
+            #data["key"] = item.key1
+            data_list.append(data)
+        json_data['data'] = data_list[:100]
+
+        return JsonResponse(json_data)
+
+        #return HttpResponse(a.raw_query)
+
+    elif request.POST.get('language') == 'English':
+        ll = Cihai.objects.all().using('db2').filter(Cihai_key2_word_contains='一技之长')
+        return HttpResponse(ll.values())
+
+    else:
+        return HttpResponse("error")
 
 
 def showlist(request):
@@ -72,7 +116,7 @@ def index(request):
     return render(request, 'index.html', locals())#把上下文传到index.html页面
 
 #列表页
-def list(request,lid):
+def listx(request,lid):
     list = Article.objects.filter(category_id=lid).order_by('-id')#获取通过URL传进来的lid，然后筛选出对应文章
     cname = Category.objects.get(id=lid)#获取当前文章的栏目名
 
