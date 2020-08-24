@@ -55,7 +55,7 @@ def wxpost(request):
         data_list = []
         key = mapping[request.POST.get('mult')]
         kw = request.POST.get('keyword')
-        print(kw)
+        #print(kw)
         # items = Cihai.objects.all().using('db2').raw(
         #     "SELECT * from Cihai WHERE key1=(SELECT key1  from Cihai where binary words='一心一意')")
         items = Words.objects.all().using('db2').raw(
@@ -63,7 +63,7 @@ def wxpost(request):
         # print(len(items))
         # print(type(items))
         items = random.sample(list(items), 100 if len(items) > 100 else len(items))
-        print(len(items))
+        #print(len(items))
         for item in items:
             # print(type(item))
             data = {}
