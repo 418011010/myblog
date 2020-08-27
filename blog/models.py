@@ -108,7 +108,7 @@ class Cihai(models.Model):
     key3 = models.CharField(max_length=255, blank=True, null=True)
     key4 = models.CharField(max_length=255, blank=True, null=True)
     key5 = models.CharField(max_length=255, blank=True, null=True)
-
+    times = models.IntegerField(blank=True, default=0)
     class Meta:
 
         managed = True
@@ -123,7 +123,7 @@ class Words(models.Model):
     key2 = models.CharField(max_length=255, blank=True, null=True)
     key3 = models.CharField(max_length=255, blank=True, null=True)
     key4 = models.CharField(max_length=255, blank=True, null=True)
-
+    times = models.IntegerField(blank=True, default=0)
     class Meta:
 
         managed = True

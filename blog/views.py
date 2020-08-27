@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.shortcuts import render
 from django.http import HttpResponse ,JsonResponse
 from .models import Article
@@ -29,25 +30,40 @@ def wxpost(request):
         #print(kw)
         # items = Cihai.objects.all().using('db2').raw(
         #     "SELECT * from Cihai WHERE key1=(SELECT key1  from Cihai where binary words='一心一意')")
-        items = Cihai.objects.all().using('db2').raw("SELECT * from Cihai WHERE {}=(SELECT {}  from Cihai where words='{}')".format(key, key, kw))
+        items = Cihai.objects.all().using('db2').raw("SELECT * from Cihai WHERE {}=(SELECT {}  from Cihai where words='{}') and CHAR_LENGTH(words)={}".format(key, key, kw, len(kw)))
+        #Cihai.objects.using('db2').update_or_create(words=kw, times=F('times') + 1, defaults={'words': kw},)
         #print(len(items))
-        #print(type(items))
-        items = random.sample(list(items), 100 if len(items) > 100 else len(items))
-        #print(len(items))
-        for item in items:
-            #print(type(item))
-            data = {}
-            data["words"] = item.words
-            data["content"] = item.content
-            data["yin"] = item.yin
-            data["key"] = getattr(item, key)
-            #data["key"] = item.key1
-            data_list.append(data)
-        json_data['data'] = data_list[:100]
+        if len(items):
+            Cihai.objects.using('db2').filter(words=kw).update(times=F('times') + 1)
+            #print(len(items))
+            #print(type(items))
+            items = random.sample(list(items), 100 if len(items) > 100 else len(items))
+            #print(len(items))
+            for item in items:
+                #print(type(item))
+                data = {}
+                data["words"] = item.words
+                data["content"] = item.content
+                data["yin"] = item.yin
+                data["key"] = getattr(item, key)
+                #data["key"] = item.key1
+                data_list.append(data)
+            json_data['data'] = data_list[:100]
 
-        return JsonResponse(json_data)
+            return JsonResponse(json_data)
 
-        #return HttpResponse(a.raw_query)
+            #return HttpResponse(a.raw_query)
+        else:
+            Cihai.objects.using('db2').update_or_create(words=kw, times=1, content='暂未收录', yin='zan wei shou lu', key1='u', key2='ou,u', key3='ei,ou,u', key4='an,ei,ou,u')
+            json_data['data'] = [
+                {
+                    "words": kw,
+                    "content": "暂未收录",
+                    "yin": "zan wei shou lu",
+                    "key": "an,ei,ou,u"
+                },
+            ]
+            return JsonResponse(json_data)
 
     elif request.POST.get('language') == 'English':
         mapping = {'s': 'key1', 'd': 'key2', 't': 'key3', 'q': 'key4'}
@@ -59,25 +75,33 @@ def wxpost(request):
         # items = Cihai.objects.all().using('db2').raw(
         #     "SELECT * from Cihai WHERE key1=(SELECT key1  from Cihai where binary words='一心一意')")
         items = Words.objects.all().using('db2').raw(
-            "SELECT * from Words WHERE {}=(SELECT {}  from Words where binary word='{}')".format(key, key, kw))
+            "SELECT * from Words WHERE {}=(SELECT {}  from Words where binary word='{}') ".format(key, key, kw))
         # print(len(items))
         # print(type(items))
-        items = random.sample(list(items), 100 if len(items) > 100 else len(items))
-        #print(len(items))
-        for item in items:
-            # print(type(item))
-            data = {}
-            data["words"] = item.word
-            data["content"] = item.ch
-            data["yin"] = item.pron
-            data["key"] = getattr(item, key)
-            # data["key"] = item.key1
-            data_list.append(data)
-        json_data['data'] = data_list[:100]
+        if len(items):
+            Words.objects.using('db2').filter(word=kw).update(times=F('times') + 1)
+            items = random.sample(list(items), 100 if len(items) > 100 else len(items))
+            #print(len(items))
+            for item in items:
+                # print(type(item))
+                data = {}
+                data["words"] = item.word
+                data["content"] = item.ch
+                data["yin"] = item.pron
+                data["key"] = getattr(item, key)
+                # data["key"] = item.key1
+                data_list.append(data)
+            json_data['data'] = data_list[:100]
 
-        return JsonResponse(json_data)
-        #return HttpResponse(ll.values())
-
+            return JsonResponse(json_data)
+            #return HttpResponse(ll.values())
+        else:
+            return JsonResponse({'data': [{
+                "words": kw,
+                "content": "暂未收录",
+                "yin": "",
+                "key": ""
+                }]}, safe=False)
     else:
         return HttpResponse("出错了哦~")
 
