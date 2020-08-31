@@ -5,6 +5,7 @@ from .models import Article
 from .models import Category, Banner, Article, Tag, Link, Cihai, Words
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import random
+import re
 # Create your views here.
 
 
@@ -54,6 +55,7 @@ def wxpost(request):
 
             #return HttpResponse(a.raw_query)
         else:
+            kw = re.sub("[A-Za-z0-9\!\%\[\]\,\。\ ]", "", kw)
             Cihai.objects.using('db2').update_or_create(words=kw, times=1, content='暂未收录', yin='zan wei shou lu', key1='u', key2='ou,u', key3='ei,ou,u', key4='an,ei,ou,u')
             json_data['data'] = [
                 {
