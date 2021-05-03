@@ -2,9 +2,10 @@ from django.db.models import F
 from django.shortcuts import render
 from django.http import HttpResponse ,JsonResponse
 from .models import Article
-from .models import Category, Banner, Article, Tag, Link, Cihai, Words
+from .models import Category, Banner, Article, Tag, Link, Cihai, Words, Niceday
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import random
+import requests
 import re
 # Create your views here.
 
@@ -16,9 +17,36 @@ def global_variable(request):
     return locals()
 
 
+def getprovince(ipaddr):
+    headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
+    url = 'http://ip.ws.126.net/ipquery?ip={}'.format(ipaddr)
+
+    r = requests.get(url,headers = headers)
+    #out = re.findall('localAddress={city:"荆门市", province:"湖北省"}',r.text)
+    out = re.findall('province:"(.*?)"', r.text)
+    # print(out)
+
+    pr = {}
+    pr.update(province=out[0])
+
+    #return JsonResponse(pr,safe=False)
+    return pr
+
+
+def get_ip(request):
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        ip =  request.META['HTTP_X_FORWARDED_FOR']
+    else:
+        ip = request.META['REMOTE_ADDR']
+
+    return JsonResponse(getprovince(ip),safe=False)
+
+
+
 def testdb(request):
-    ll = Cihai.objects.all().using('db2').filter(key3__contains='ang')[0:10]
-    return HttpResponse(ll.values())
+    #ll = Niceday.objects.all().using('db2').filter(key3__contains='ang')[0:10]
+    ll = Niceday.objects.all().using('db2').order_by('?').first()
+    return HttpResponse(ll.sentence)
 
 
 def wxpost(request):
@@ -56,7 +84,7 @@ def wxpost(request):
             #return HttpResponse(a.raw_query)
         else:
             kw = re.sub("[A-Za-z0-9\!\%\[\]\,\。\ ]", "", kw)
-            Cihai.objects.using('db2').update_or_create(words=kw, times=1, content='暂未收录', yin='zan wei shou lu', key1='u', key2='ou,u', key3='ei,ou,u', key4='an,ei,ou,u')
+            Cihai.objects.using('db2').update_or_create(words=kw[0:4], times=1, content='暂未收录', yin='zan wei shou lu', key1='u', key2='ou,u', key3='ei,ou,u', key4='an,ei,ou,u')
             json_data['data'] = [
                 {
                     "words": kw,

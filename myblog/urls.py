@@ -24,6 +24,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('get_ip/',views.get_ip),
     path('showlist/', views.showlist),
     path('ueditor/', include('DjangoUeditor.urls')),
     re_path('^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
@@ -35,7 +36,7 @@ urlpatterns = [
     path('s/', views.search, name='search'),  # 搜索列表页
     path('about/', views.about, name='about'),  # 联系我们单页
     path('testdb/', views.testdb, name='testdb'),
-    path('wxpost/', views.wxpost, name='wxpost')
+    path('wxpost/', views.wxpost, name='wxpost'),
 
 
 ]

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1dk13+$oiww#bc6#=7gd75dd=l6(%dzkzzqp#vgfpug-nx19t8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -86,14 +86,24 @@ DATABASES = {
         'PASSWORD': 'coship',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+	'OPTIONS': {
+
+            "init_command": "SET foreign_key_checks = 0;",
+
+        },
     },
     'db2': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'rhymes',
+        'NAME': 'rhyme',
         'USER': 'root',
         'PASSWORD': 'coship',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+	'OPTIONS': {
+
+            "init_command": "SET foreign_key_checks = 0;",
+
+        },
     }
 }
 

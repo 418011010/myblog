@@ -112,7 +112,7 @@ class Cihai(models.Model):
     class Meta:
 
         managed = True
-        db_table = 'cihai'
+        db_table = 'Cihai'
 
 
 class Words(models.Model):
@@ -127,4 +127,12 @@ class Words(models.Model):
     class Meta:
 
         managed = True
-        db_table = 'words'
+        db_table = 'Words'
+
+class Niceday(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    sentence = models.CharField(max_length=255, blank=True, null=True)
+    class Meta:
+        managed = True
+        db_table = 'Niceday'
+
