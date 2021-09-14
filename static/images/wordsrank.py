@@ -20,7 +20,7 @@ _rebuild()
 pymysql.install_as_MySQLdb()
 
 
-ce = create_engine("mysql+mysqlconnector://root:coship@localhost:3306/rhyme", encoding='utf-8')
+ce = create_engine("mysql+mysqlconnector://root:******@localhost:3306/rhyme", encoding='utf-8')
 sql1 = "select words,times from `Cihai` where times>=1 order by times desc limit 10"
 data1 = pd.read_sql_query(sql1, con=ce)
 print(data1)
