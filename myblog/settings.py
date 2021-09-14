@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'blog',
         'USER': 'root',
-        'PASSWORD': 'coship',
+        'PASSWORD': '******',
         'HOST': '127.0.0.1',
         'PORT': '3306',
 	'OPTIONS': {
@@ -96,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'rhyme',
         'USER': 'root',
-        'PASSWORD': 'coship',
+        'PASSWORD': '******',
         'HOST': '127.0.0.1',
         'PORT': '3306',
 	'OPTIONS': {
